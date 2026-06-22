@@ -1,0 +1,63 @@
+<%- include('../partials/header') %>
+
+<section class="page-header">
+  <h1>➕ Registrar movimiento</h1>
+  <a href="/movimientos" class="btn btn-secondary">← Volver</a>
+</section>
+
+<% if (error) { %>
+  <div class="alert alert-error">⚠️ <%= error %></div>
+<% } %>
+
+<div class="form-card">
+  <form action="/movimientos" method="POST">
+    <div class="form-grid">
+
+      <div class="form-group">
+        <label for="medicamento_id">Medicamento *</label>
+        <select id="medicamento_id" name="medicamento_id" required>
+          <option value="">-- Selecciona --</option>
+          <% medicamentos.forEach(m => { %>
+            <option value="<%= m.id %>"><%= m.nombre %> (stock: <%= m.stock %>)</option>
+          <% }) %>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="tipo">Tipo de movimiento *</label>
+        <select id="tipo" name="tipo" required>
+          <option value="entrada">⬆️ Entrada (compra / reabastecimiento)</option>
+          <option value="salida">⬇️ Salida (venta / uso)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="cantidad">Cantidad *</label>
+        <input type="number" id="cantidad" name="cantidad" min="1" required>
+      </div>
+
+      <div class="form-group">
+        <label for="cliente_id">Cliente (solo para salidas)</label>
+        <select id="cliente_id" name="cliente_id">
+          <option value="">-- Sin cliente --</option>
+          <% clientes.forEach(c => { %>
+            <option value="<%= c.id %>"><%= c.nombre %> <%= c.apellido %></option>
+          <% }) %>
+        </select>
+      </div>
+
+      <div class="form-group form-full">
+        <label for="observaciones">Observaciones</label>
+        <textarea id="observaciones" name="observaciones" rows="2"
+                  placeholder="Ej: Compra inicial, venta a domicilio..."></textarea>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Registrar movimiento</button>
+      <a href="/movimientos" class="btn btn-secondary">Cancelar</a>
+    </div>
+  </form>
+</div>
+
+<%- include('../partials/footer') %>

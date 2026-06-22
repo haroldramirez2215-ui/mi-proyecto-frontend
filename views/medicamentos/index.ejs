@@ -1,0 +1,62 @@
+<%- include('../partials/header') %>
+
+<section class="page-header">
+  <h1>💊 Medicamentos</h1>
+  <a href="/medicamentos/nuevo" class="btn btn-primary">+ Nuevo medicamento</a>
+</section>
+
+<% if (error) { %>
+  <div class="alert alert-error"><%= error %></div>
+<% } %>
+
+<% if (medicamentos.length === 0) { %>
+  <div class="empty-state">
+    <p>No hay medicamentos registrados aún.</p>
+    <a href="/medicamentos/nuevo" class="btn btn-primary">Registrar primer medicamento</a>
+  </div>
+<% } else { %>
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Nombre</th>
+          <th>Categoría</th>
+          <th>Precio</th>
+          <th>Stock</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% medicamentos.forEach(m => { %>
+        <tr>
+          <td><%= m.id %></td>
+          <td><strong><%= m.nombre %></strong><br><small><%= m.descripcion %></small></td>
+          <td><span class="tag"><%= m.categoria %></span></td>
+          <td>$<%= Number(m.precio).toLocaleString('es-CO') %></td>
+          <td><strong><%= m.stock %></strong> uds.</td>
+          <td>
+            <% if (m.stock === 0) { %>
+              <span class="badge badge-danger">Sin stock</span>
+            <% } else if (m.stock <= 5) { %>
+              <span class="badge badge-warning">Stock bajo</span>
+            <% } else { %>
+              <span class="badge badge-ok">Disponible</span>
+            <% } %>
+          </td>
+          <td class="acciones">
+            <a href="/medicamentos/editar/<%= m.id %>" class="btn btn-edit">✏️ Editar</a>
+            <form action="/medicamentos/eliminar/<%= m.id %>" method="POST"
+                  onsubmit="return confirm('¿Eliminar <%= m.nombre %>?')">
+              <button class="btn btn-delete">🗑️ Eliminar</button>
+            </form>
+          </td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+<% } %>
+
+<%- include('../partials/footer') %>

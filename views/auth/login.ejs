@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PharmaTo-do — Iniciar sesión</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="login-body">
+
+  <div class="login-card">
+    <div class="login-logo">💊</div>
+    <h1 class="login-title">PharmaTo-do</h1>
+    <p class="login-sub">Sistema de gestión de farmacia</p>
+
+    <% if (error) { %>
+      <div class="alert alert-error"><%= error %></div>
+    <% } %>
+
+    <form action="/login" method="POST" class="login-form">
+      <div class="form-group">
+        <label for="username">Usuario</label>
+        <input type="text" id="username" name="username"
+               placeholder="admin" autocomplete="username" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Contraseña</label>
+        <input type="password" id="password" name="password"
+               placeholder="••••••••" autocomplete="current-password" required>
+      </div>
+      <button type="submit" class="btn btn-primary btn-full">Ingresar</button>
+    </form>
+
+    <p class="login-hint">Usuario: <strong>admin</strong> &nbsp;|&nbsp; Contraseña: <strong>pharma2025</strong></p>
+  </div>
+
+</body>
+</html>

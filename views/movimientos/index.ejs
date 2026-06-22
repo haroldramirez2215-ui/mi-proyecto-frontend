@@ -1,0 +1,80 @@
+<%- include('../partials/header') %>
+
+<section class="page-header">
+  <h1>📦 Inventario y Movimientos</h1>
+  <a href="/movimientos/nuevo" class="btn btn-primary">+ Registrar movimiento</a>
+</section>
+
+<% if (error) { %>
+  <div class="alert alert-error"><%= error %></div>
+<% } %>
+
+<!-- Stock disponible -->
+<h2 class="section-title">Stock actual</h2>
+<div class="stock-grid">
+  <% stock.forEach(m => { %>
+  <div class="stock-card <%= m.stock === 0 ? 'stock-danger' : m.stock <= 5 ? 'stock-warning' : 'stock-ok' %>">
+    <div class="stock-nombre"><%= m.nombre %></div>
+    <div class="stock-cat"><%= m.categoria %></div>
+    <div class="stock-cantidad"><%= m.stock %> <span>uds.</span></div>
+    <% if (m.stock === 0) { %>
+      <span class="badge badge-danger">Sin stock</span>
+    <% } else if (m.stock <= 5) { %>
+      <span class="badge badge-warning">Stock bajo</span>
+    <% } else { %>
+      <span class="badge badge-ok">Disponible</span>
+    <% } %>
+  </div>
+  <% }) %>
+</div>
+
+<!-- Historial de movimientos -->
+<h2 class="section-title" style="margin-top:2rem">Historial de movimientos</h2>
+
+<% if (movimientos.length === 0) { %>
+  <div class="empty-state">
+    <p>No hay movimientos registrados.</p>
+  </div>
+<% } else { %>
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Tipo</th>
+          <th>Medicamento</th>
+          <th>Cantidad</th>
+          <th>Cliente</th>
+          <th>Observaciones</th>
+          <th>Fecha</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% movimientos.forEach(mv => { %>
+        <tr>
+          <td><%= mv.id %></td>
+          <td>
+            <span class="badge <%= mv.tipo === 'entrada' ? 'badge-entrada' : 'badge-salida' %>">
+              <%= mv.tipo === 'entrada' ? '⬆️ Entrada' : '⬇️ Salida' %>
+            </span>
+          </td>
+          <td><%= mv.medicamento_nombre %></td>
+          <td><strong><%= mv.cantidad %></strong></td>
+          <td><%= mv.cliente_nombre ? mv.cliente_nombre + ' ' + mv.cliente_apellido : '—' %></td>
+          <td><%= mv.observaciones || '—' %></td>
+          <td><%= new Date(mv.fecha).toLocaleString('es-CO') %></td>
+          <td>
+            <form action="/movimientos/eliminar/<%= mv.id %>" method="POST"
+                  onsubmit="return confirm('¿Eliminar este movimiento?')">
+              <button class="btn btn-delete">🗑️</button>
+            </form>
+          </td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+<% } %>
+
+<%- include('../partials/footer') %>
